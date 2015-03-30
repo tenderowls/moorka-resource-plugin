@@ -2,7 +2,7 @@ import sbt._
 import sbt.Keys._
 import bintray.Keys._
 
-val moorkaVersion = "0.4.0"
+val moorkaVersion = "0.5.0-SNAPSHOT"
 
 scalaVersion := "2.10.5"
 
