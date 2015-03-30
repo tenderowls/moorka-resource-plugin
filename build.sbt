@@ -2,25 +2,29 @@ import sbt._
 import sbt.Keys._
 import bintray.Keys._
 
-val currentScalaVersion = "2.10.5"
-val moorkaVersion = "0.4.0-SNAPSHOT"
+val moorkaVersion = "0.4.0"
 
-scalaVersion := currentScalaVersion
+scalaVersion := "2.10.5"
 
-val dontPublish = Seq(
-  publish := { }
-)
+version := moorkaVersion
+
+organization := "com.tenderowls.opensource"
+
+name := "Moorka Resources Plugin"
+
+normalizedName := "moorka-resources-plugin"
+
+licenses := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0.html"))
+
+homepage := Some(url("http://github.com/tenderowls/moorka"))
+
+scalacOptions ++= Seq("-deprecation", "-feature")
+
+sbtPlugin := true
 
 val publishSettings = moorkaVersion.endsWith("SNAPSHOT") match {
   case true => Seq(
-    publishTo := Some("Flexis Thirdparty Snapshots" at "https://nexus.flexis.ru/content/repositories/thirdparty-snapshots"),
-    credentials += {
-      val ivyHome = sys.props.get("sbt.ivy.home") match {
-        case Some(path) ⇒ file(path)
-        case None ⇒ Path.userHome / ".ivy2"
-      }
-      Credentials(ivyHome / ".credentials")
-    }
+    publishTo := Some("Flexis Thirdparty Snapshots" at "https://nexus.flexis.ru/content/repositories/thirdparty-snapshots")
   )
   case false => bintraySettings ++ bintrayPublishSettings ++ Seq(
     repository in bintray := "moorka",
@@ -29,15 +33,4 @@ val publishSettings = moorkaVersion.endsWith("SNAPSHOT") match {
   )
 }
 
-lazy val root = project.
-  in(file(".")).
-  settings(publishSettings:_*).
-  settings(
-    version := moorkaVersion,
-    organization := "com.tenderowls.opensource",
-    licenses := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0.html")),
-    homepage := Some(url("http://github.com/tenderowls/moorka-resouce-plugin")),
-    scalacOptions ++= Seq("-deprecation", "-feature"),
-    scalaVersion := "2.10.4",
-    sbtPlugin := true
-  )
+seq(publishSettings:_*)
